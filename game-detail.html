@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏加载中...</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #2a2a2a;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00bcd4;
+            text-decoration: none;
+        }
+        .header .user-menu a {
+            color: #f0f0f0;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 15px;
+        }
+        .game-detail-container {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 居中内容 */
+        }
+        .game-iframe-wrapper {
+            width: 100%;
+            max-width: 960px; /* 游戏iframe的最大宽度 */
+            aspect-ratio: 16 / 9; /* 常见的16:9长宽比，确保iframe按比例缩放 */
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden; /* 确保iframe内容不会溢出圆角边框 */
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .game-iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* 移除iframe默认边框 */
+        }
+        .game-info {
+            max-width: 960px;
+            width: 100%;
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            margin-top: 20px; /* 与iframe区域的间距 */
+        }
+        .game-info h1 {
+            color: #00bcd4;
+            margin-top: 0;
+            font-size: 28px;
+        }
+        .game-info p {
+            line-height: 1.6;
+            font-size: 16px;
+            color: #ccc;
+        }
+        .footer {
+            background-color: #2a2a2a;
+            color: #aaa;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        /* 媒体查询：适配小屏幕 */
+        @media (max-width: 768px) {
+            .game-detail-container {
+                padding: 10px;
+            }
+            .game-iframe-wrapper, .game-info {
+                width: calc(100% - 20px); /* 调整为全宽减去边距 */
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 15px;
+            }
+            .header .logo {
+                margin-bottom: 10px;
+            }
+            .header .user-menu {
+                margin-top: 10px;
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">🎮 我的游戏世界</a>
+        <nav class="user-menu">
+            <a href="#">登录</a>
+            <a href="#">注册</a>
+        </nav>
+    </header>
+
+    <div class="game-detail-container">
+        <div class="game-iframe-wrapper">
+            <iframe id="gameIframe" class="game-iframe" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-pointer-lock allow-downloads"></iframe>
+        </div>
+        <div class="game-info">
+            <h1 id="gameTitle">游戏加载中...</h1>
+            <p id="gameGenre">类型：</p>
+            <p id="gameDescription">这里是游戏的详细描述，包括玩法、特点、控制方法等。请确保这些信息能吸引玩家。</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 我的游戏世界. All rights reserved. | <a href="#" style="color: #00bcd4;">隐私政策</a> | <a href="#" style="color: #00bcd4;">服务条款</a></p>
+    </footer>
+
+    <script>
+        // 游戏数据映射表
+        // 💡 提示：在实际项目中，这些数据通常会从后端API动态获取，而非硬编码在前端。
+        const gamesData = {
+            "monster-survivors": {
+                title: "Monster Survivors",
+                genre: "动作, 生存",
+                description: "在怪物幸存者中，你需要在一个充满怪物的世界中生存下来，收集资源，升级你的装备，并与不断涌来的敌人战斗。你能坚持多久？",
+                iframeUrl: "https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html"
+            },
+            "ragdoll-archers": {
+                title: "Ragdoll Archers",
+                genre: "射击, 物理",
+                description: "一款有趣的布娃娃射击游戏，你需要控制你的弓箭手，精确射击敌人。掌握物理引擎，成为弓箭大师！",
+                // ⚠️ 注意：这个URL "https://www.crazygames.com/game/ragdoll-archers" 看起来是CrazyGames的**游戏详情页**，而不是直接的iframe嵌入URL。
+                // 真正的游戏iframe URL通常是像 "https://games.crazygames.com/en_US/ragdoll-archers/index.html" 这样的形式。
+                // 如果直接嵌入此URL可能因跨域安全策略（X-Frame-Options, CSP）而失败。
+                // 请务必从游戏提供商处获取或通过其他方式找到真正的iframe嵌入URL。
+                iframeUrl: "https://www.crazygames.com/game/ragdoll-archers"
+            },
+            "stickman-clash": {
+                title: "Stickman Clash",
+                genre: "格斗, 动作",
+                description: "火柴人之间的激烈对决！选择你的火柴人战士，使用各种技能和武器，击败所有对手。",
+                iframeUrl: "https://games.crazygames.com/en_US/stickman-clash/index.html"
+            },
+            "bloxdhop-io": {
+                title: "Bloxdhop.io",
+                genre: "跑酷, 多人",
+                description: "在方块世界中跳跃和跑酷！与其他玩家一起竞技，完成各种障碍挑战，体验速度与技巧的乐趣。",
+                iframeUrl: "https://games.crazygames.com/en_US/bloxdhop-io/index.html"
+            },
+            "hazmob-fps-online-shooter": {
+                title: "Hazmob FPS Online Shooter",
+                genre: "射击, 多人",
+                description: "加入这款刺激的在线第一人称射击游戏！与全球玩家实时对战，体验紧张刺激的枪战和团队合作。",
+                // ⚠️ 注意：同上，这个URL "https://www.crazygames.com/game/hazmob-fps-online-shooter" 可能是游戏详情页而非直接iframe嵌入URL。
+                // 同样可能遇到跨域安全策略问题。请获取正确的iframe嵌入URL。
+                iframeUrl: "https://www.crazygames.com/game/hazmob-fps-online-shooter"
+            },
+            "fortzone-battle-royale": {
+                title: "Fortzone Battle Royale XKD",
+                genre: "大逃杀, 射击",
+                description: "跳伞、搜刮、生存！在这款大逃杀游戏中，你必须成为最后一名幸存者。探索地图，寻找武器，击败所有敌人。",
+                iframeUrl: "https://games.crazygames.com/en_US/fortzone-battle-royale-xkd/index.html"
+            },
+            "daily-emoji-hunt": {
+                title: "Daily Emoji Hunt",
+                genre: "益智, 休闲",
+                description: "每天都有新的表情符号等你发现！在复杂的图片中找到隐藏的表情符号，锻炼你的观察力。",
+                iframeUrl: "https://games.crazygames.com/en_US/daily-emoji-hunt/index.html"
+            },
+            "snake-vs-block": {
+                title: "Snake vs Block",
+                genre: "休闲, 街机",
+                description: "控制你的蛇，吃掉方块，避开障碍物！挑战你的反应速度，看你能走多远。",
+                iframeUrl: "https://games.crazygames.com/en_US/snake-vs-block/index.html"
+            },
+            "8-ball-billiards-classic": {
+                title: "8 Ball Billiards Classic",
+                genre: "体育, 模拟",
+                description: "经典的8球台球游戏，精确击球，掌握角度和力度，成为台球高手！",
+                iframeUrl: "https://games.crazygames.com/en_US/8-ball-billiards-classic/index.html"
+            }
+        };
+
+        // 函数：从URL中获取查询参数
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        const gameId = getQueryParam('game_id'); // 获取URL中的game_id
+        const game = gamesData[gameId]; // 根据game_id查找游戏数据
+
+        const gameIframe = document.getElementById('gameIframe');
+        const gameTitleElement = document.getElementById('gameTitle');
+        const gameGenreElement = document.getElementById('gameGenre');
+        const gameDescriptionElement = document.getElementById('gameDescription');
+
+        if (game) {
+            // 如果找到游戏，则设置iframe的src和更新游戏信息
+            gameIframe.src = game.iframeUrl;
+            gameTitleElement.textContent = game.title;
+            gameGenreElement.textContent = `类型：${game.genre}`;
+            gameDescriptionElement.textContent = game.description;
+            document.title = `游戏详情 - ${game.title}`; // 更新页面标题
+        } else {
+            // 如果未找到游戏
+            gameIframe.src = ""; // 清空iframe
+            gameTitleElement.textContent = "游戏未找到或加载失败 😅";
+            gameGenreElement.textContent = "";
+            gameDescriptionElement.textContent = "抱歉，无法找到您请求的游戏。请检查URL是否正确，或返回首页选择其他游戏。";
+        }
+    </script>
+</body>
+</html>

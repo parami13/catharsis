@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的游戏世界 - 首页</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #2a2a2a;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00bcd4;
+            text-decoration: none;
+        }
+
+        .header .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            max-width: 600px;
+        }
+
+        .header .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3a3a3a;
+            color: #f0f0f0;
+            font-size: 16px;
+        }
+
+        .header .user-menu a {
+            color: #f0f0f0;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 15px;
+        }
+
+        .main-container {
+            display: flex;
+            flex-grow: 1;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .sidebar {
+            flex-shrink: 0;
+            width: 250px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #00bcd4;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 8px 10px;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #00bcd4;
+            color: #1a1a1a;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .filter-sort-bar {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .filter-sort-bar button {
+            background-color: #4a4a4a;
+            color: #f0f0f0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.2s ease;
+        }
+        .filter-sort-bar button:hover {
+            background-color: #00bcd4;
+            color: #1a1a1a;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        /* 将整个游戏卡片设置为链接 */
+        .game-card {
+            background-color: #3a3a3a;
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            display: block; /* 使整个卡片行为像块级链接 */
+            text-decoration: none; /* 移除链接下划线 */
+            color: inherit; /* 继承父元素颜色，而不是默认蓝色 */
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .game-card h4 {
+            font-size: 16px;
+            margin: 10px 5px 5px;
+            color: #f0f0f0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .game-card p {
+            font-size: 13px;
+            color: #ccc;
+            margin: 0 5px 10px;
+        }
+
+        .footer {
+            background-color: #2a2a2a;
+            color: #aaa;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        /* 媒体查询：适配小屏幕 */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 15px;
+            }
+
+            .header .search-bar {
+                margin: 10px 0;
+                width: 100%;
+            }
+
+            .header .user-menu {
+                margin-top: 10px;
+            }
+
+            .game-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">🎮 我的游戏世界</a>
+        <div class="search-bar">
+            <input type="text" placeholder="搜索游戏...">
+        </div>
+        <nav class="user-menu">
+            <a href="#">登录</a>
+            <a href="#">注册</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h3>游戏分类</h3>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">🔥 热门游戏</a></li>
+                    <li><a href="#">✨ 新发布</a></li>
+                    <li><a href="#">冒险</a></li>
+                    <li><a href="#">益智</a></li>
+                    <li><a href="#">动作</a></li>
+                    <li><a href="#">休闲</a></li>
+                    <li><a href="#">射击</a></li>
+                    <li><a href="#">体育</a></li>
+                    <li><a href="#">多人</a></li>
+                    <li><a href="#">模拟</a></li>
+                    <li><a href="#">策略</a></li>
+                    <li><a href="#">我的收藏</a></li>
+                    <li><a href="#">随机游戏</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section class="filter-sort-bar">
+                <button>热门</button>
+                <button>新发布</button>
+                <button>字母顺序</button>
+                <button>最高评分</button>
+            </section>
+
+            <section class="game-grid">
+                <a href="game-detail.html?game_id=monster-survivors" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/00bcd4/ffffff?text=Monster+Survivors" alt="Monster Survivors 缩略图">
+                    <h4>Monster Survivors</h4>
+                    <p>动作, 生存</p>
+                </a>
+                <a href="game-detail.html?game_id=ragdoll-archers" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/ff5722/ffffff?text=Ragdoll+Archers" alt="Ragdoll Archers 缩略图">
+                    <h4>Ragdoll Archers</h4>
+                    <p>射击, 物理</p>
+                </a>
+                <a href="game-detail.html?game_id=stickman-clash" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/4caf50/ffffff?text=Stickman+Clash" alt="Stickman Clash 缩略图">
+                    <h4>Stickman Clash</h4>
+                    <p>格斗, 动作</p>
+                </a>
+                <a href="game-detail.html?game_id=bloxdhop-io" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/9c27b0/ffffff?text=Bloxdhop.io" alt="Bloxdhop.io 缩略图">
+                    <h4>Bloxdhop.io</h4>
+                    <p>跑酷, 多人</p>
+                </a>
+                <a href="game-detail.html?game_id=hazmob-fps-online-shooter" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/f44336/ffffff?text=Hazmob+FPS+Online" alt="Hazmob FPS Online Shooter 缩略图">
+                    <h4>Hazmob FPS Online Shooter</h4>
+                    <p>射击, 多人</p>
+                </a>
+                <a href="game-detail.html?game_id=fortzone-battle-royale" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/2196f3/ffffff?text=Fortzone+Battle+Royale" alt="Fortzone Battle Royale XKD 缩略图">
+                    <h4>Fortzone Battle Royale XKD</h4>
+                    <p>大逃杀, 射击</p>
+                </a>
+                <a href="game-detail.html?game_id=daily-emoji-hunt" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/ffc107/ffffff?text=Daily+Emoji+Hunt" alt="Daily Emoji Hunt 缩略图">
+                    <h4>Daily Emoji Hunt</h4>
+                    <p>益智, 休闲</p>
+                </a>
+                <a href="game-detail.html?game_id=snake-vs-block" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/795548/ffffff?text=Snake+vs+Block" alt="Snake vs Block 缩略图">
+                    <h4>Snake vs Block</h4>
+                    <p>休闲, 街机</p>
+                </a>
+                <a href="game-detail.html?game_id=8-ball-billiards-classic" class="game-card">
+                    <img src="https://via.placeholder.com/200x120/607d8b/ffffff?text=8+Ball+Billiards" alt="8 Ball Billiards Classic 缩略图">
+                    <h4>8 Ball Billiards Classic</h4>
+                    <p>体育, 模拟</p>
+                </a>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 我的游戏世界. All rights reserved. | <a href="#" style="color: #00bcd4;">隐私政策</a> | <a href="#" style="color: #00bcd4;">服务条款</a></p>
+    </footer>
+</body>
+</html>
