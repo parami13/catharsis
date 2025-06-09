@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>泡泡解压 - 首页</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,8 +30,19 @@
         .header .logo {
             font-size: 24px;
             font-weight: bold;
-            color: #00bcd4;
+            background: linear-gradient(45deg, #ff6b95, #8458cb, #b875ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             text-decoration: none;
+            background-size: 300% 300%;
+            animation: gradient 5s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .header .search-bar {
@@ -54,6 +66,13 @@
             text-decoration: none;
             margin-left: 20px;
             font-size: 15px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.4s;
+        }
+
+        .header .user-menu a:hover {
+            background: linear-gradient(45deg, #ff6b95, #8458cb, #b875ff);
         }
 
         .main-container {
@@ -65,7 +84,7 @@
 
         .sidebar {
             flex-shrink: 0;
-            width: 250px;
+            width: 200px;
             background-color: #1d1e22;
             border-radius: 8px;
             padding: 20px;
@@ -97,13 +116,40 @@
             color: #f0f0f0;
             text-decoration: none;
             border-radius: 4px;
-            transition: background-color 0.2s ease;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            background: #2c2c2c;
+        }
+
+        .sidebar ul li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 149, 0.5), rgba(132, 88, 203, 0.5), rgba(184, 117, 255, 0.5), transparent);
+            transition: all 0.6s;
+        }
+
+        .sidebar ul li a:hover::before,
+        .sidebar ul li a.active::before {
+            left: 100%;
         }
 
         .sidebar ul li a:hover,
         .sidebar ul li a.active {
-            background-color: #00bcd4;
-            color: #1a1a1a;
+            background: linear-gradient(90deg, #ff6b95, #8458cb, #b875ff);
+            background-size: 300% 100%;
+            background-position: 0% 50%;
+            animation: slideGradient 3s ease infinite;
+        }
+
+        @keyframes slideGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .main-content {
@@ -131,10 +177,31 @@
             border-radius: 5px;
             cursor: pointer;
             margin-right: 10px;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .filter-sort-bar button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 149, 0.5), transparent);
+            transition: all 0.6s;
+        }
+        
+        .filter-sort-bar button:hover::before {
+            left: 100%;
+        }
+        
         .filter-sort-bar button:hover {
-            background-color: #00bcd4;
+            background: linear-gradient(90deg, #ff6b95, #8458cb, #b875ff);
+            background-size: 300% 100%;
+            background-position: 0% 50%;
+            animation: slideGradient 3s ease infinite;
             color: #1a1a1a;
         }
 
@@ -144,23 +211,41 @@
             gap: 20px;
         }
 
-        /* 将整个游戏卡片设置为链接 */
         .game-card {
             background-color: #212121;
             border-radius: 12px;
             overflow: hidden;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
-            display: block; /* 使整个卡片行为像块级链接 */
-            text-decoration: none; /* 移除链接下划线 */
-            color: inherit; /* 继承父元素颜色，而不是默认蓝色 */
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 107, 149, 0), rgba(255, 107, 149, 0.3));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
         }
 
         .game-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.03);
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            z-index: 2;
         }
 
         .game-card img {
@@ -170,6 +255,7 @@
             display: block;
             border-top-left-radius: 12px;
             border-top-right-radius: 12px;
+            position: relative;
         }
 
         .game-card h4 {
@@ -179,12 +265,16 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            position: relative;
+            z-index: 2;
         }
 
         .game-card p {
             font-size: 13px;
             color: #ccc;
             margin: 0 5px 10px;
+            position: relative;
+            z-index: 2;
         }
 
         .footer {
@@ -194,6 +284,36 @@
             padding: 20px;
             margin-top: 20px;
             border-top: 1px solid #333;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer a {
+            color: #aaa;
+            text-decoration: none;
+            padding: 3px 8px;
+            border-radius: 4px;
+            transition: all 0.4s ease;
+            display: inline-block;
+            position: relative;
+        }
+
+        .footer a:hover {
+            color: #fff;
+            background: linear-gradient(45deg, #ff6b95, #8458cb, #b875ff);
+            background-size: 300% 300%;
+            animation: gradient 3s ease infinite;
+        }
+
+        .game-card:hover h4 {
+            color: #fff;
+            background: linear-gradient(45deg, #ff6b95, #8458cb, #b875ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: all 0.4s ease;
         }
 
         /* 媒体查询：适配小屏幕 */
@@ -327,7 +447,8 @@
     </div>
 
     <footer class="footer">
-        <p>&copy; 2025 我的游戏世界. All rights reserved. | <a href="#" style="color: #00bcd4;">隐私政策</a> | <a href="#" style="color: #00bcd4;">服务条款</a></p>
+        <p>&copy; 2025 泡泡解压. All rights reserved.</p>
+        <p><a href="#">隐私政策</a> | <a href="#">服务条款</a> | <a href="#">联系我们</a></p>
     </footer>
 </body>
 </html>
